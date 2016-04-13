@@ -11,6 +11,7 @@ nfn_str = 'na(v)*(1-n)-nb(v)*n'
 hfn_str = 'ha(v)*(1-h)-hb(v)*h'
 aux_str = 'm*m*m*h'
 
+#Parameters from Guckenhemer 1993(Bifurcation of the Hodgkin-Huxley...)
 pars_args = {
         'Iapp': 1.9,
         'C': 1.0,
