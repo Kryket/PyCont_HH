@@ -40,18 +40,16 @@ auxdict = {
         'ha': (['v'], '.128*exp(-(50+v)/18)'),
         'hb': (['v'], '4/(1+exp(-(v+27)/5))'),
         'na': (['v'], '.032*(v+52)/(1-exp(-(v+52)/5))'),
-        'nb': (['v'], '.5*exp(-(57+v)/40)'),
-
-        'ptest': (['p'], '1+p+ma(-50)+C'),
-        'atest': (['q'], 'q+mb(-40)') }
+        'nb': (['v'], '.5*exp(-(57+v)/40)') }
 
 DSargs = args(name='HH')
 DSargs.pars = pars_args
 DSargs.varspecs = {
                     'v': vfn_str, 'm': mfn_str,
-                    'h': hfn_str, 'n': nfn_str,
-                    'v_bd0': 'getbound("v",0)',
-                    'v_bd1': 'getbound("v",1)' }
+                    'h': hfn_str, 'n': nfn_str }
+                    #,
+                    #'v_bd0': 'getbound("v",0)',
+                    #'v_bd1': 'getbound("v",1)' }
 DSargs.fnspecs = auxdict
 DSargs.ics = ic_args
 
@@ -73,29 +71,13 @@ PyCont.newCurve(PCargs)
 print('Computing curve...')
 start = clock()
 PyCont['EQ1'].forward()
-print('done in %.3f seconds!' % (clock()-start))
-
-PCargs.name = 'LC1'
-PCargs.type = 'LC-C'
-PCargs.initpoint = 'EQ1:H1'
-PCargs.MinStepSize = 0.005
-PCargs.MaxStepSize = 1.0
-PCargs.StepSize = 0.01
-PCargs.MaxNumPoints = 200
-PCargs.NumSPOut = 40
-PCargs.LocBifPoints = 'LPC'
-PCargs.SolutionMeasures = 'all'
-PCargs.SaveEigen = True
-PyCont.newCurve(PCargs)
-
-print('Computing curve...')
-start = clock()
-PyCont['LC1'].forward()
+PyCont['EQ1'].backward()
 print('done in %.3f seconds!' % (clock()-start))
 
 # Plot
 PyCont.display(('Iapp','v'),stability=True)
-PyCont['LC1'].display(('Iapp','v_min'),stability=True)
+#PyCont['LC1'].display(('Iapp','v_min'),stability=True)
+PyCont['EQ1'].display(coords=('Iapp', 'v'), stability=True)
 
 plt.xlim([-25, 150])
 PyCont.plot.fig1.axes1.axes.set_title('Bifurcation Diagram')
